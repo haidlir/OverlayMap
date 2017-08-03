@@ -1,0 +1,214 @@
+{{set . "title" "Home"}}
+{{template "App/Header.html" .}}
+
+    <!-- Begin page content -->
+    <div class="container-fluid">
+
+      <div class="row" style="margin: 10px">
+        <div class="col" style="padding: inherit">
+          <button class="btn btn-primary" data-toggle="modal" data-target="#addNewProject">Tambah Projek Baru</button>
+          <button class="btn btn-primary" type="submit" disabled>Hapus Projek</button>
+        </div>
+
+        <div class="col-6">
+          <form class="form-inline justify-content-end">
+            <input class="form-control mr-sm-2" type="text" placeholder="Search" disabled>
+            <button class="btn btn-outline-success my-2 my-sm-2" type="submit" disabled>Search</button>
+          </form>
+        </div>
+
+      </div>
+
+      <div class="row">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th style="width: 15%">Nama Project</th>
+              <th style="width: 30%">Deskripsi</th>
+              <th>Radius</th>
+              <th>File Input</th>
+              <th>Hasil Mapping</th>
+              <th>Status</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            
+            {{range .projects}}
+            <tr>
+              <th scope="row">{{.Id}}</th>
+              <td>{{.ProjectName}}</td>
+              <td>{{.Description}}</td>
+              <td>{{.MaxDist}}</td>
+              <td>
+                <ol style="padding-left: inherit">
+                  <li><a href="/public/assets/{{.ProjectName}}-{{.InputFileName_001}}">{{.InputFileName_001}}</a></li>
+                  <li><a href="/public/assets/{{.ProjectName}}-{{.InputFileName_002}}">{{.InputFileName_002}}</a></li> 
+                </ol>
+              </td>
+              <td>
+                {{if .IsDone}}
+                <a href="/public/assets/{{.OutputFileName_001}}" class="btn btn-success" style="width: 165px">Hasil Mapping</a>                
+                </br><a href="/public/assets/{{.OutputFileName_002}}" class="btn btn-success" style="width: 165px; margin-top: 5px" >Summary Objek 1</a>
+                </br><a href="/public/assets/{{.OutputFileName_003}}" class="btn btn-success" style="width: 165px; margin-top: 5px" >Summary Objek 2</a>
+                {{end}}
+              </td>
+              <td>
+                {{if .IsOnGoing}}
+                  <div class="progress">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 75%">Reload/Refresh (F5) to Update</div>
+                  </div>
+                {{else}}
+                  {{.Status}}
+                {{end}}
+              </td>
+            </tr>
+            {{end}}
+
+            <!-- <tr>
+              <th scope="row">1</th>
+              <td>ODP to eNodeB Telkomsel</td>
+              <td>
+                xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx
+                xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx
+              </td>
+              <td>500 M</td>
+              <td>
+                <ol style="padding-left: inherit">
+                  <li><a href="#">Daftar_eNodeB-PWT</a></li>
+                  <li><a href="#">ODP Telkom Jateng Barat Utara</a></li> 
+                </ol>
+              </td>
+              <td>
+                <button class="btn btn-success" style="width: 165px">Hasil Mapping</button>                
+                </br><button class="btn btn-success" style="width: 165px; margin-top: 5px" disabled>Summary Objek 1</button>
+                </br><button class="btn btn-success" style="width: 165px; margin-top: 5px" disabled>Summary Objek 2</button>
+              </td>
+              <td>Done</td>
+            </tr>
+
+            <tr>
+              <th scope="row">2</th>
+              <td>ODP to DP</td>
+              <td>
+                xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx
+                xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx
+
+              </td>
+              <td>100 M</td>
+              <td>
+                <ol style="padding-left: inherit">
+                <li><a href="#">DP Telkom Witel Pekalongan</a></li>
+                <li><a href="#">ODP Telkom Jateng Barat Utara</a></li>
+                </ol>
+              </td>
+              <td>
+              </td>
+              <td>
+                <div class="progress">
+                  <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%">50%</div>
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <th scope="row">3</th>
+              <td>ODP to Calon Pelanggan UN-SC</td>
+              <td>
+                xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx
+                xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx
+              </td>
+              <td>250 M</td>
+              <td>
+                <ol style="padding-left: inherit">
+                <li><a href="#">Daftar Pelanggan UNSC Juli 2017</a></li>
+                <li><a href="#">ODP Telkom Jateng Barat Utara</a></li>
+                </ol>
+              </td>
+              <td>
+              </td>
+              <td>
+                Menunggu Antrian
+              </td>
+            </tr> -->
+            
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+<!-- Modal -->
+<div class="modal fade bd-example-modal-lg" id="addNewProject" tabindex="-1" role="dialog" aria-labelledby="addNewProjectLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addNewProjectlLabel">Tambah Projek Baru</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="/" method="POST" id="form-addNew" enctype="multipart/form-data">
+          <div class="form-group">
+            <label for="project-name" class="form-control-label">Nama Projek:</label>
+            <input type="text" class="form-control" id="project-name" name="project-name" required>
+          </div>
+          <div class="form-group">
+            <label for="description" class="form-control-label">Deskripsi:</label>
+            <textarea class="form-control" id="description" name="description" required></textarea>
+          </div>
+          <div class="row">
+            <div class="col-6" style="border-right-style: inset">
+              <div class="form-group">
+                <label for="file_001" class="form-control-label">File Objek 1</label>
+                <label class="custom-file form-control">
+                  <input type="file" accept=".csv" id="file_001" name="file_001" class="custom-file-input" required>
+                  <span class="custom-file-control"></span>
+                </label>
+              </div>
+              <div class="form-group">
+                <label for="file_002" class="form-control-label">File Objek 2</label>
+                <label class="custom-file form-control" style="margin: auto">
+                  <input type="file" accept=".csv" id="file_002" name="file_002" class="custom-file-input" required>
+                  <span class="custom-file-control"></span>
+                </label>
+              </div>
+            </div>
+            <div class="col-6">
+              <label class="form-control-label">Contoh File Input (save as .csv):</label>
+              <img src="/public/img/example_file.jpg" class="img-fluid" alt="Contoh File Input">
+            </div>  
+          </div>
+          <div class="form-group">
+            <label for="radius-max" class="form-control-label">Radius/Jarak Maksimal (dalam meter):</label>
+            <input type="number" min="0" class="form-control" id="radius-max" name="radius-max" required>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="submit" class="btn btn-primary" form="form-addNew" value="Submit">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add your JS below  -->
+{{template "App/JS.html" .}}
+
+<script>
+  $('.custom-file-input').on('change',function(){
+    var fileName = $(this).val().split(/(\\|\/)/g).pop().substring(0,40);
+    $(this).next('.custom-file-control').addClass("selected").html(fileName);
+  })
+</script>
+
+<style>
+  .custom-file-control.selected:lang(en)::after {
+    content: "" !important;
+  }
+</style>
+
+{{template "App/Footer.html" .}}
