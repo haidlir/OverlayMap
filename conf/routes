@@ -9,8 +9,8 @@ module:testrunner
 
 # GET     /                                       App.Index
 GET      /                                        App.Index
-POST     /                                        App.AddProject   
-
+POST     /                                        App.AddProject
+POST     /delete-project                                        App.DeleteProject
 
 # Ignore favicon requests
 GET     /favicon.ico                            404

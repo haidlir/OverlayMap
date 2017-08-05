@@ -8,6 +8,7 @@ import (
   "fmt"
   "io/ioutil"
   "math"
+  "os"
   "OverlayMap/app"
 )
 
@@ -114,5 +115,64 @@ func (c App) AddProject() revel.Result {
       revel.ERROR.Println(err)
   }
 
+  return c.Redirect(App.Index)
+}
+
+func (c App) DeleteProject() revel.Result {
+  db := app.DB
+
+  // Multiple Check-box
+  var err error
+  err = c.Request.ParseForm()
+  if err !=  nil {
+    revel.ERROR.Println("Error Delete Project: ", err)
+  }
+  deleteList := c.Request.Form["delete-list"]
+  for _, idDel := range deleteList {
+    // get filenames related to the project
+    sqlArgs := fmt.Sprintf("select `project-name`, input_001_filename, input_002_filename, " +
+                           "output_001_filename, output_002_filename, output_003_filename " +
+                           "from `project-table` where id=%v", idDel)
+      projects, err := db.Query(sqlArgs)
+      if err != nil {
+        revel.ERROR.Println(err)
+        continue
+      }
+
+      deleteFiles := []*string{}
+      for projects.Next() {
+        var projectName, file1, file2, file3, file4, file5 string
+        err = projects.Scan(&projectName, &file1, &file2, &file3, &file4, &file5)
+        file1 = fmt.Sprintf("%v-%v", projectName, file1)
+        file2 = fmt.Sprintf("%v-%v", projectName, file2)
+        if err != nil {
+          revel.ERROR.Println(err)
+          continue
+        }
+        deleteFiles = append(deleteFiles, &file1, &file2, &file3, &file4, &file5)
+      }
+
+    // delete files
+    for _, filename := range deleteFiles {
+      if filename == nil {
+        continue
+      }
+      err := os.Remove(app.PathToFile+"public/assets/"+*filename)
+      if err != nil {
+        revel.ERROR.Println(err)
+        continue
+      }
+    }
+
+    // delete project from datebase
+    for _, idDel := range deleteList {
+      sqlArgs = fmt.Sprintf("DELETE FROM `project-table` WHERE  `id`='%v';", idDel)
+      _, err = db.Exec(sqlArgs)
+      if err != nil {
+          revel.ERROR.Println(err)
+          continue
+      }
+    }
+  }
   return c.Redirect(App.Index)
 }

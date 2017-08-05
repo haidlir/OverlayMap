@@ -7,7 +7,7 @@
       <div class="row" style="margin: 10px">
         <div class="col" style="padding: inherit">
           <button class="btn btn-primary" data-toggle="modal" data-target="#addNewProject">Tambah Projek Baru</button>
-          <button class="btn btn-primary" type="submit" disabled>Hapus Projek</button>
+          <button class="btn btn-primary" data-toggle="modal" data-target="#deleteProject">Hapus Projek</button>
         </div>
 
         <div class="col-6">
@@ -57,7 +57,7 @@
               <td>
                 {{if .IsOnGoing}}
                   <div class="progress">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 75%">Reload/Refresh (F5) to Update</div>
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 75%; height: 25px">Reload/Refresh (F5) to Update</div>
                   </div>
                 {{else}}
                   {{.Status}}
@@ -65,81 +65,13 @@
               </td>
             </tr>
             {{end}}
-
-            <!-- <tr>
-              <th scope="row">1</th>
-              <td>ODP to eNodeB Telkomsel</td>
-              <td>
-                xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx
-                xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx
-              </td>
-              <td>500 M</td>
-              <td>
-                <ol style="padding-left: inherit">
-                  <li><a href="#">Daftar_eNodeB-PWT</a></li>
-                  <li><a href="#">ODP Telkom Jateng Barat Utara</a></li> 
-                </ol>
-              </td>
-              <td>
-                <button class="btn btn-success" style="width: 165px">Hasil Mapping</button>                
-                </br><button class="btn btn-success" style="width: 165px; margin-top: 5px" disabled>Summary Objek 1</button>
-                </br><button class="btn btn-success" style="width: 165px; margin-top: 5px" disabled>Summary Objek 2</button>
-              </td>
-              <td>Done</td>
-            </tr>
-
-            <tr>
-              <th scope="row">2</th>
-              <td>ODP to DP</td>
-              <td>
-                xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx
-                xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx
-
-              </td>
-              <td>100 M</td>
-              <td>
-                <ol style="padding-left: inherit">
-                <li><a href="#">DP Telkom Witel Pekalongan</a></li>
-                <li><a href="#">ODP Telkom Jateng Barat Utara</a></li>
-                </ol>
-              </td>
-              <td>
-              </td>
-              <td>
-                <div class="progress">
-                  <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%">50%</div>
-                </div>
-              </td>
-            </tr>
-
-            <tr>
-              <th scope="row">3</th>
-              <td>ODP to Calon Pelanggan UN-SC</td>
-              <td>
-                xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx
-                xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx
-              </td>
-              <td>250 M</td>
-              <td>
-                <ol style="padding-left: inherit">
-                <li><a href="#">Daftar Pelanggan UNSC Juli 2017</a></li>
-                <li><a href="#">ODP Telkom Jateng Barat Utara</a></li>
-                </ol>
-              </td>
-              <td>
-              </td>
-              <td>
-                Menunggu Antrian
-              </td>
-            </tr> -->
-            
           </tbody>
         </table>
       </div>
 
     </div>
 
-<!-- Modal -->
+<!-- Modal Add New Project-->
 <div class="modal fade bd-example-modal-lg" id="addNewProject" tabindex="-1" role="dialog" aria-labelledby="addNewProjectLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
@@ -195,8 +127,52 @@
   </div>
 </div>
 
+<!-- Modal Delete Project-->
+<div class="modal fade bd-example-modal-lg" id="deleteProject" tabindex="-1" role="dialog" aria-labelledby="deleteProjectLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteProjectlLabel">Hapus Projek</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-12">
+            <button class="btn btn-success" onclick="selectAll()">Pilih Semua</button>
+          </div>
+        </div>
+        <hr>
+        <form id="form-deleteProject" action="/delete-project" method="POST">
+          <div id="delete-boxes">
+            {{range .projects}}
+            <div class="form-check">
+              <label class="form-check-label">
+                <input class="form-check-input" id="delete-list" name="delete-list" type="checkbox" value="{{.Id}}">
+                {{.ProjectName}}
+              </label>
+            </div>
+            {{end}}
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="submit" class="btn btn-primary" form="form-deleteProject" value="Submit">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Add your JS below  -->
 {{template "App/JS.html" .}}
+
+<script>
+  function selectAll() {
+    $("#delete-boxes input:checkbox").prop("checked", true)
+  }
+</script>
 
 <script>
   $('.custom-file-input').on('change',function(){
